@@ -59,8 +59,8 @@
   .hero {
     background: linear-gradient(180deg, #0b1224 0%, var(--navy) 60%, #131d33 100%);
     color: #fff;
-    padding: calc(18px + env(safe-area-inset-top)) 22px 46px;
-    border-radius: 0 0 30px 30px;
+    padding: calc(12px + env(safe-area-inset-top)) 16px 32px;
+    border-radius: 0 0 24px 24px;
   }
 
   .hero-top {
@@ -72,24 +72,24 @@
   .brand {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 20px;
+    gap: 8px;
+    font-size: 17px;
     font-weight: 700;
     letter-spacing: 0.2px;
   }
-  .brand svg { width: 24px; height: 24px; color: #fff; }
+  .brand svg { width: 21px; height: 21px; color: #fff; }
 
   .month-nav {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    margin: 20px auto 0;
+    gap: 8px;
+    margin: 8px auto 0;
   }
   .month-label {
-    min-width: 150px;
+    min-width: 132px;
     text-align: center;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: .2px;
     color: #e2e8f0;
@@ -105,8 +105,8 @@
     transition: background .15s, color .15s, transform .05s;
   }
   .month-btn {
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
   }
   .month-btn:hover,
@@ -114,10 +114,10 @@
   .month-btn:active,
   .adjust-btn:active { transform: scale(.96); }
   .month-btn svg,
-  .adjust-btn svg { width: 17px; height: 17px; }
+  .adjust-btn svg { width: 15px; height: 15px; }
 
   .reset-btn {
-    width: 40px; height: 40px;
+    width: 34px; height: 34px;
     display: grid; place-items: center;
     border-radius: 50%;
     border: 1px solid rgba(255, 255, 255, 0.14);
@@ -127,17 +127,17 @@
     transition: background .15s, color .15s;
   }
   .reset-btn:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
-  .reset-btn svg { width: 18px; height: 18px; }
+  .reset-btn svg { width: 15px; height: 15px; }
 
-  .balance { text-align: center; margin-top: 16px; }
+  .balance { text-align: center; margin-top: 8px; }
   .balance-label {
     color: #94a3b8;
-    font-size: 15px;
+    font-size: 12px;
     font-weight: 500;
-    margin-bottom: 6px;
+    margin-bottom: 2px;
   }
   .balance-amt {
-    font-size: 52px;
+    font-size: 38px;
     font-weight: 800;
     line-height: 1.05;
     color: var(--green);
@@ -151,8 +151,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 26px;
-    font-size: 14px;
+    margin-top: 12px;
+    font-size: 12px;
     color: #94a3b8;
   }
   .total-edit {
@@ -172,8 +172,8 @@
   .total-edit svg { width: 13px; height: 13px; opacity: .7; }
 
   .progress {
-    margin-top: 10px;
-    height: 8px;
+    margin-top: 6px;
+    height: 5px;
     background: rgba(148, 163, 184, 0.25);
     border-radius: 99px;
     overflow: hidden;
@@ -191,35 +191,35 @@
   .budget-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 14px;
+    gap: 8px;
+    margin-top: 8px;
   }
   .adjust-btn {
-    min-height: 38px;
+    min-height: 36px;
     grid-auto-flow: column;
     justify-content: center;
-    gap: 7px;
-    border-radius: 11px;
-    font-size: 13px;
+    gap: 5px;
+    border-radius: 9px;
+    font-size: 11px;
     font-weight: 700;
   }
 
   /* ---------- Cards ---------- */
   .card {
     background: var(--card);
-    border-radius: 20px;
+    border-radius: 16px;
     box-shadow: var(--shadow);
   }
   .add-card {
-    margin: -30px 16px 0;
-    padding: 22px 20px;
+    margin: -22px 12px 0;
+    padding: 12px 14px;
     position: relative;
     z-index: 2;
   }
 
   .card-title {
-    margin: 0 0 18px;
-    font-size: 19px;
+    margin: 0 0 8px;
+    font-size: 16px;
     font-weight: 700;
     display: flex;
     align-items: center;
@@ -233,21 +233,21 @@
     gap: 6px;
     background: var(--field);
     border: 1.5px solid var(--line);
-    border-radius: 14px;
-    padding: 16px 18px;
+    border-radius: 11px;
+    padding: 9px 12px;
     transition: border-color .15s, box-shadow .15s;
   }
   .amount-field:focus-within {
     border-color: var(--blue);
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
   }
-  .amount-field .cur { font-size: 22px; color: var(--muted-2); font-weight: 600; }
+  .amount-field .cur { font-size: 18px; color: var(--muted-2); font-weight: 600; }
   #amountInput {
     flex: 1;
     border: none;
     background: transparent;
     outline: none;
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 700;
     color: var(--text);
     width: 100%;
@@ -260,15 +260,15 @@
 
   .cats {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin: 16px 0;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    margin: 8px 0;
   }
   .cats-label {
     display: block;
-    margin: 16px 2px 0;
+    margin: 8px 2px 0;
     color: var(--muted);
-    font-size: 12px;
+    font-size: 9px;
     font-weight: 700;
     letter-spacing: .7px;
     text-transform: uppercase;
@@ -277,18 +277,19 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 7px;
-    padding: 16px 10px;
+    gap: 3px;
+    min-height: 54px;
+    padding: 7px 3px;
     background: var(--card);
     border: 1.5px solid var(--line);
-    border-radius: 14px;
+    border-radius: 10px;
     color: var(--muted);
-    font-size: 15px;
+    font-size: 11px;
     font-weight: 600;
     cursor: pointer;
     transition: all .15s;
   }
-  .cat svg { width: 24px; height: 24px; }
+  .cat svg { width: 18px; height: 18px; }
   .cat:hover { border-color: #cbd5e1; }
   .cat.selected {
     background: var(--blue-bg);
@@ -298,10 +299,11 @@
 
   .deduct {
     width: 100%;
-    padding: 17px;
+    min-height: 42px;
+    padding: 10px;
     border: none;
-    border-radius: 14px;
-    font-size: 17px;
+    border-radius: 11px;
+    font-size: 14px;
     font-weight: 700;
     color: #fff;
     background: var(--muted-2);
@@ -314,45 +316,45 @@
 
   /* ---------- Daily pace ---------- */
   .pace-card {
-    margin: 18px 16px 0;
-    padding: 22px 20px 20px;
+    margin: 8px 12px 0;
+    padding: 14px;
   }
   .pace-head {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 14px;
+    gap: 10px;
   }
   .pace-title {
     margin: 0;
-    font-size: 19px;
+    font-size: 16px;
     font-weight: 750;
   }
   .pace-subtitle {
-    margin: 5px 0 0;
+    margin: 3px 0 0;
     color: var(--muted);
-    font-size: 13px;
+    font-size: 11px;
     line-height: 1.35;
   }
   .pace-status {
     flex: 0 0 auto;
     border-radius: 999px;
-    padding: 6px 9px;
+    padding: 5px 7px;
     background: #f1f5f9;
     color: #475569;
-    font-size: 11px;
+    font-size: 9px;
     font-weight: 800;
     letter-spacing: .25px;
     text-transform: uppercase;
   }
   .pace-status.ahead { background: #dcfce7; color: #15803d; }
   .pace-status.over { background: #fee2e2; color: #b91c1c; }
-  .pace-balance { margin-top: 20px; }
-  .pace-balance-label { color: var(--muted); font-size: 13px; font-weight: 600; }
+  .pace-balance { margin-top: 10px; }
+  .pace-balance-label { color: var(--muted); font-size: 11px; font-weight: 600; }
   .pace-amount {
     margin-top: 3px;
     color: #16a34a;
-    font-size: 31px;
+    font-size: 27px;
     font-weight: 800;
     letter-spacing: -.5px;
   }
@@ -362,17 +364,17 @@
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1px;
-    margin: 18px 0;
+    margin: 10px 0;
     overflow: hidden;
     border: 1px solid var(--line);
     border-radius: 13px;
     background: var(--line);
   }
-  .pace-metric { min-width: 0; padding: 11px 9px; background: var(--field); }
+  .pace-metric { min-width: 0; padding: 8px; background: var(--field); }
   .pace-metric-label {
     display: block;
     color: var(--muted);
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 700;
     line-height: 1.2;
     letter-spacing: .35px;
@@ -383,7 +385,7 @@
     margin-top: 5px;
     overflow: hidden;
     color: var(--text);
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 750;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -590,11 +592,11 @@
     <div class="budget-actions" aria-label="Adjust this month's budget">
       <button class="adjust-btn" id="decreaseBudget">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/></svg>
-        <span>Decrease budget</span>
+        <span>Decrease</span>
       </button>
       <button class="adjust-btn" id="increaseBudget">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-        <span>Increase budget</span>
+        <span>Increase</span>
       </button>
     </div>
   </header>
