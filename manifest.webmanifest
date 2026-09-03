@@ -1,7 +1,7 @@
 {
   "name": "Budget Tracker",
   "short_name": "Budget",
-  "description": "Track your spending against a budget. Works offline, stores data on your device.",
+  "description": "Track monthly budgets and spending by payment type. Works offline and stores data on your device.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

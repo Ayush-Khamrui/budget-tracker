@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Budget Tracker</title>
-<meta name="description" content="Track your spending against a budget. Works offline, stores data on your device." />
+<meta name="description" content="Track monthly budgets and spending by Online, Cash, Card, and EMI. Works offline on your device." />
 
 <link rel="manifest" href="manifest.webmanifest" />
 <meta name="theme-color" content="#0f172a" />
@@ -79,6 +79,43 @@
   }
   .brand svg { width: 24px; height: 24px; color: #fff; }
 
+  .month-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px auto 0;
+  }
+  .month-label {
+    min-width: 150px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: .2px;
+    color: #e2e8f0;
+  }
+  .month-btn,
+  .adjust-btn {
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.06);
+    color: #cbd5e1;
+    cursor: pointer;
+    transition: background .15s, color .15s, transform .05s;
+  }
+  .month-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+  }
+  .month-btn:hover,
+  .adjust-btn:hover { background: rgba(255, 255, 255, 0.14); color: #fff; }
+  .month-btn:active,
+  .adjust-btn:active { transform: scale(.96); }
+  .month-btn svg,
+  .adjust-btn svg { width: 17px; height: 17px; }
+
   .reset-btn {
     width: 40px; height: 40px;
     display: grid; place-items: center;
@@ -92,7 +129,7 @@
   .reset-btn:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
   .reset-btn svg { width: 18px; height: 18px; }
 
-  .balance { text-align: center; margin-top: 22px; }
+  .balance { text-align: center; margin-top: 16px; }
   .balance-label {
     color: #94a3b8;
     font-size: 15px;
@@ -123,6 +160,10 @@
     display: inline-flex;
     align-items: center;
     gap: 5px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
     border-radius: 8px;
     padding: 2px 4px;
     transition: color .15s;
@@ -146,6 +187,22 @@
   }
   .progress-bar.low { background: var(--amber); }
   .progress-bar.over { background: var(--red); }
+
+  .budget-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .adjust-btn {
+    min-height: 38px;
+    grid-auto-flow: column;
+    justify-content: center;
+    gap: 7px;
+    border-radius: 11px;
+    font-size: 13px;
+    font-weight: 700;
+  }
 
   /* ---------- Cards ---------- */
   .card {
@@ -206,6 +263,15 @@
     grid-template-columns: 1fr 1fr;
     gap: 12px;
     margin: 16px 0;
+  }
+  .cats-label {
+    display: block;
+    margin: 16px 2px 0;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .7px;
+    text-transform: uppercase;
   }
   .cat {
     display: flex;
@@ -280,7 +346,9 @@
   }
   .tx-icon svg { width: 21px; height: 21px; }
   .tx-icon.online { background: var(--blue-bg); color: var(--blue); }
-  .tx-icon.office { background: #f1f5f9; color: #475569; }
+  .tx-icon.cash { background: #ecfdf5; color: #059669; }
+  .tx-icon.card { background: #f5f3ff; color: #7c3aed; }
+  .tx-icon.emi { background: #fff7ed; color: #ea580c; }
 
   .tx-main { flex: 1; min-width: 0; }
   .tx-cat { font-size: 15px; font-weight: 600; color: var(--text); }
@@ -372,19 +440,39 @@
       </button>
     </div>
 
+    <nav class="month-nav" aria-label="Choose month">
+      <button class="month-btn" id="previousMonth" aria-label="Previous month" title="Previous month">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <div class="month-label" id="monthLabel" aria-live="polite"></div>
+      <button class="month-btn" id="nextMonth" aria-label="Next month" title="Next month">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+    </nav>
+
     <div class="balance">
-      <div class="balance-label">Remaining Balance</div>
+      <div class="balance-label">Remaining this month</div>
       <div class="balance-amt" id="remaining">₹0</div>
     </div>
 
     <div class="hero-foot">
       <span id="spentText">Spent: ₹0</span>
-      <span class="total-edit" id="totalEdit" title="Tap to set your budget">
+      <button class="total-edit" id="totalEdit" title="Set this month's budget">
         <span id="totalText">Total: ₹0</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
-      </span>
+      </button>
     </div>
     <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="budget-actions" aria-label="Adjust this month's budget">
+      <button class="adjust-btn" id="decreaseBudget">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/></svg>
+        <span>Decrease budget</span>
+      </button>
+      <button class="adjust-btn" id="increaseBudget">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        <span>Increase budget</span>
+      </button>
+    </div>
   </header>
 
   <section class="card add-card">
@@ -395,14 +483,23 @@
       <input id="amountInput" type="number" inputmode="decimal" min="0" step="any" placeholder="0" />
     </div>
 
+    <span class="cats-label">Payment type</span>
     <div class="cats">
       <button class="cat selected" data-cat="online" aria-pressed="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
         <span>Online</span>
       </button>
-      <button class="cat" data-cat="office" aria-pressed="false">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-        <span>Office</span>
+      <button class="cat" data-cat="cash" aria-pressed="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 9h.01M18 15h.01"/></svg>
+        <span>Cash</span>
+      </button>
+      <button class="cat" data-cat="card" aria-pressed="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></svg>
+        <span>Card</span>
+      </button>
+      <button class="cat" data-cat="emi" aria-pressed="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 9h18M8 13h.01M12 13h.01M16 13h.01M8 17h.01M12 17h.01"/></svg>
+        <span>EMI</span>
       </button>
     </div>
 
@@ -410,7 +507,7 @@
   </section>
 
   <section class="history">
-    <h3 class="history-title">Transactions History</h3>
+    <h3 class="history-title" id="historyTitle">Transactions History</h3>
     <div class="tx-list" id="txList"></div>
   </section>
 </div>
@@ -433,7 +530,7 @@
 <script>
 /* =========================================================
    Local database (IndexedDB) with a localStorage fallback.
-   Stores the budget and every expense on the device.
+   Stores monthly budgets and every expense on the device.
    ========================================================= */
 const DEFAULT_BUDGET = 10000;
 
@@ -474,14 +571,17 @@ const DB = (() => {
   }
 
   return {
-    async getBudget() {
+    async getBudget(month) {
       const s = await store("meta", "readonly");
-      const row = await reqToPromise(s.get("budget"));
-      return row ? Number(row.value) : DEFAULT_BUDGET;
+      const row = await reqToPromise(s.get("budget:" + month));
+      if (row) return Number(row.value);
+      const legacyStore = await store("meta", "readonly");
+      const legacy = await reqToPromise(legacyStore.get("budget"));
+      return legacy ? Number(legacy.value) : DEFAULT_BUDGET;
     },
-    async setBudget(value) {
+    async setBudget(month, value) {
       const s = await store("meta", "readwrite");
-      await reqToPromise(s.put({ key: "budget", value: Number(value) }));
+      await reqToPromise(s.put({ key: "budget:" + month, value: Number(value) }));
     },
     async allExpenses() {
       const s = await store("expenses", "readonly");
@@ -496,9 +596,9 @@ const DB = (() => {
       const s = await store("expenses", "readwrite");
       await reqToPromise(s.delete(id));
     },
-    async clearExpenses() {
-      const s = await store("expenses", "readwrite");
-      await reqToPromise(s.clear());
+    async clearExpenses(month) {
+      const rows = await this.allExpenses();
+      await Promise.all(rows.filter((e) => expenseMonth(e) === month).map((e) => this.deleteExpense(e.id)));
     },
   };
 })();
@@ -507,8 +607,15 @@ const DB = (() => {
 const LSDB = {
   _get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } },
   _set(k, v) { localStorage.setItem(k, JSON.stringify(v)); },
-  async getBudget() { return Number(this._get("bt_budget", DEFAULT_BUDGET)); },
-  async setBudget(v) { this._set("bt_budget", Number(v)); },
+  async getBudget(month) {
+    const budgets = this._get("bt_budgets", {});
+    return Number(budgets[month] ?? this._get("bt_budget", DEFAULT_BUDGET));
+  },
+  async setBudget(month, value) {
+    const budgets = this._get("bt_budgets", {});
+    budgets[month] = Number(value);
+    this._set("bt_budgets", budgets);
+  },
   async allExpenses() {
     return this._get("bt_expenses", []).sort((a, b) => new Date(b.date) - new Date(a.date));
   },
@@ -522,7 +629,9 @@ const LSDB = {
   async deleteExpense(id) {
     this._set("bt_expenses", this._get("bt_expenses", []).filter((e) => e.id !== id));
   },
-  async clearExpenses() { this._set("bt_expenses", []); },
+  async clearExpenses(month) {
+    this._set("bt_expenses", this._get("bt_expenses", []).filter((e) => expenseMonth(e) !== month));
+  },
 };
 
 let store = DB; // swapped to LSDB if IndexedDB fails on first use
@@ -546,15 +655,57 @@ const els = {
   deduct: document.getElementById("deductBtn"),
   txList: document.getElementById("txList"),
   resetBtn: document.getElementById("resetBtn"),
+  previousMonth: document.getElementById("previousMonth"),
+  nextMonth: document.getElementById("nextMonth"),
+  monthLabel: document.getElementById("monthLabel"),
+  historyTitle: document.getElementById("historyTitle"),
+  decreaseBudget: document.getElementById("decreaseBudget"),
+  increaseBudget: document.getElementById("increaseBudget"),
 };
 
 let selectedCat = "online";
+let selectedMonth = monthKey(new Date());
 
-const CAT_LABEL = { online: "Online", office: "Office" };
+const CAT_LABEL = { online: "Online", office: "Cash", cash: "Cash", card: "Card", emi: "EMI" };
 const CAT_ICON = {
   online: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>',
-  office: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>',
+  office: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 9h.01M18 15h.01"/></svg>',
+  cash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 9h.01M18 15h.01"/></svg>',
+  card: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></svg>',
+  emi: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 9h18M8 13h.01M12 13h.01M16 13h.01M8 17h.01M12 17h.01"/></svg>',
 };
+
+function monthKey(date) {
+  const d = new Date(date);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+}
+
+function expenseMonth(expense) {
+  return expense.month || monthKey(expense.date);
+}
+
+function monthDate(key) {
+  const [year, month] = key.split("-").map(Number);
+  return new Date(year, month - 1, 1, 12);
+}
+
+function shiftMonth(offset) {
+  const d = monthDate(selectedMonth);
+  d.setMonth(d.getMonth() + offset);
+  selectedMonth = monthKey(d);
+  render();
+}
+
+function entryDateForMonth(key) {
+  const now = new Date();
+  if (key === monthKey(now)) return now.toISOString();
+  const [year, month] = key.split("-").map(Number);
+  const lastDay = new Date(year, month, 0).getDate();
+  return new Date(year, month - 1, Math.min(now.getDate(), lastDay), now.getHours(), now.getMinutes()).toISOString();
+}
+
+const fmtMonth = (key) =>
+  monthDate(key).toLocaleDateString("en-IN", { month: "long", year: "numeric" });
 
 const fmtDate = (iso) =>
   new Date(iso).toLocaleString("en-IN", {
@@ -568,10 +719,14 @@ function escapeHtml(s) {
 }
 
 async function render() {
-  const [budget, expenses] = await Promise.all([store.getBudget(), store.allExpenses()]);
+  const [budget, allExpenses] = await Promise.all([store.getBudget(selectedMonth), store.allExpenses()]);
+  const expenses = allExpenses.filter((e) => expenseMonth(e) === selectedMonth);
   const spent = expenses.reduce((sum, e) => sum + Number(e.amount), 0);
   const remaining = budget - spent;
 
+  const monthName = fmtMonth(selectedMonth);
+  els.monthLabel.textContent = monthName;
+  els.historyTitle.textContent = `Transactions · ${monthName}`;
   els.remaining.textContent = money(remaining);
   els.spentText.textContent = "Spent: " + money(spent);
   els.totalText.textContent = "Total: " + money(budget);
@@ -597,7 +752,7 @@ async function render() {
     .map(
       (e) => `
       <div class="tx">
-        <div class="tx-icon ${e.category}">${CAT_ICON[e.category] || CAT_ICON.online}</div>
+        <div class="tx-icon ${e.category === "office" ? "cash" : e.category}">${CAT_ICON[e.category] || CAT_ICON.online}</div>
         <div class="tx-main">
           <div class="tx-cat">${CAT_LABEL[e.category] || escapeHtml(e.category)}</div>
           <div class="tx-date">${fmtDate(e.date)}</div>
@@ -637,7 +792,8 @@ async function deduct() {
   await store.addExpense({
     amount,
     category: selectedCat,
-    date: new Date().toISOString(),
+    month: selectedMonth,
+    date: entryDateForMonth(selectedMonth),
   });
   els.amount.value = "";
   syncDeductState();
@@ -648,6 +804,9 @@ els.deduct.addEventListener("click", deduct);
 els.amount.addEventListener("keydown", (e) => {
   if (e.key === "Enter" && !els.deduct.disabled) deduct();
 });
+
+els.previousMonth.addEventListener("click", () => shiftMonth(-1));
+els.nextMonth.addEventListener("click", () => shiftMonth(1));
 
 /* ---- Delete a single transaction ---- */
 els.txList.addEventListener("click", async (e) => {
@@ -680,6 +839,10 @@ function openModal({ title, body, withInput, inputValue, confirmText, danger }) 
   modal.body.hidden = !body;
   modal.inputWrap.hidden = !withInput;
   if (withInput) {
+    modal.input.min = "0";
+    modal.input.max = "";
+    modal.input.placeholder = "";
+    modal.input.setCustomValidity("");
     modal.input.value = inputValue ?? "";
     setTimeout(() => { modal.input.focus(); modal.input.select(); }, 50);
   }
@@ -703,13 +866,14 @@ modal.confirm.addEventListener("click", () => {
 modal.input.addEventListener("keydown", (e) => {
   if (e.key === "Enter" && onConfirm) onConfirm();
 });
+modal.input.addEventListener("input", () => modal.input.setCustomValidity(""));
 
 /* ---- Set budget ---- */
 els.totalEdit.addEventListener("click", async () => {
-  const current = await store.getBudget();
+  const current = await store.getBudget(selectedMonth);
   openModal({
-    title: "Set your budget",
-    body: "This is the total amount you want to track your spending against.",
+    title: `Set ${fmtMonth(selectedMonth)} budget`,
+    body: "Enter the total budget for this month.",
     withInput: true,
     inputValue: current,
     confirmText: "Save",
@@ -717,22 +881,51 @@ els.totalEdit.addEventListener("click", async () => {
   onConfirm = async () => {
     const v = parseFloat(modal.input.value);
     if (!(v >= 0)) return;
-    await store.setBudget(v);
+    await store.setBudget(selectedMonth, v);
     closeModal();
     await render();
   };
 });
 
+async function openBudgetAdjustment(direction) {
+  const current = await store.getBudget(selectedMonth);
+  const increasing = direction === "increase";
+  openModal({
+    title: `${increasing ? "Increase" : "Decrease"} budget`,
+    body: `Enter how much to ${direction} the ${fmtMonth(selectedMonth)} budget by.`,
+    withInput: true,
+    inputValue: "",
+    confirmText: increasing ? "Increase" : "Decrease",
+  });
+  modal.input.min = "0.01";
+  modal.input.max = increasing ? "" : String(current);
+  modal.input.placeholder = "Amount";
+  onConfirm = async () => {
+    const amount = parseFloat(modal.input.value);
+    if (!(amount > 0) || (!increasing && amount > current)) {
+      modal.input.setCustomValidity(!increasing && amount > current ? "The decrease cannot exceed the current budget." : "Enter an amount greater than zero.");
+      modal.input.reportValidity();
+      return;
+    }
+    await store.setBudget(selectedMonth, increasing ? current + amount : current - amount);
+    closeModal();
+    await render();
+  };
+}
+
+els.increaseBudget.addEventListener("click", () => openBudgetAdjustment("increase"));
+els.decreaseBudget.addEventListener("click", () => openBudgetAdjustment("decrease"));
+
 /* ---- Reset ---- */
 els.resetBtn.addEventListener("click", () => {
   openModal({
-    title: "Reset transactions?",
-    body: "This permanently deletes every logged expense and restores your full balance. Your budget total is kept.",
+    title: `Reset ${fmtMonth(selectedMonth)}?`,
+    body: "This permanently deletes every transaction in this month. Its budget is kept.",
     confirmText: "Reset",
     danger: true,
   });
   onConfirm = async () => {
-    await store.clearExpenses();
+    await store.clearExpenses(selectedMonth);
     closeModal();
     await render();
   };
@@ -743,7 +936,7 @@ els.resetBtn.addEventListener("click", () => {
    ========================================================= */
 (async function init() {
   try {
-    await store.getBudget(); // touch IndexedDB to confirm it works
+    await store.getBudget(selectedMonth); // touch IndexedDB to confirm it works
   } catch (err) {
     console.warn("IndexedDB unavailable, using localStorage fallback.", err);
     store = LSDB;
