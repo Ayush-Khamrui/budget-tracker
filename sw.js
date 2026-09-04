@@ -1,6 +1,6 @@
 /* Budget Tracker service worker — offline app shell caching.
    Bump CACHE when shell assets change to roll the cache. */
-const CACHE = "budget-tracker-v4";
+const CACHE = "budget-tracker-v5";
 
 const ASSETS = [
   "./",
